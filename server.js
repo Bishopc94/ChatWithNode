@@ -20,13 +20,13 @@ server.listen(4000);
 //initializing config
 io.sockets.on('connection', function(socket) {
 //get the message the use types
-  socket.on('setPseudo', function(data){
-    socket.set('pseudo', data);
+  socket.on('setNickName', function(data){
+    socket.set('nickName', data);
   });
 //send the message to other users
   socket.on('message', function(message) {
-    socket.get('pseudo', function(err, name) {
-      var data = { 'message' : message, pseudo : name};
+    socket.get('nickName', function(err, name) {
+      var data = { 'message' : message, nickName : name};
       io.sockets.emit('message', data);
       console.log("user " + name + " send this: " + message);
     });
