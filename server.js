@@ -17,18 +17,27 @@ app.get('/', function(req, res){
 });
 //running the app on this port
 server.listen(4000);
+var nickNames = {};
+var numUsers = 0;
 //initializing config
 io.sockets.on('connection', function(socket) {
+  var addedUser = false;
 //get the message the use types
-  socket.on('setNickName', function(data){
-    socket.set('nickName', data);
+  socket.on('setNickName', function(nickName){
+    socket.nickName = nickName;
+
+    nickNames[nickName] = nickName;
+    ++numUsers;
+    addedUser = true;
   });
 //send the message to other users
-  socket.on('message', function(message) {
-    socket.get('nickName', function(err, name) {
-      var data = { 'message' : message, nickName : name};
-      io.sockets.emit('message', data);
-      console.log("user " + name + " send this: " + message);
+  socket.on('message', function(data) {
+    socket.broadcast.emit('message', {
+      nickName: socket.nickName,
+      message: data
     });
+//      var data = { 'message' : message, nickName : name};
+  //    io.sockets.emit('message', data);
+    //  console.log("user " + name + " send this: " + message);    
   });
 });
