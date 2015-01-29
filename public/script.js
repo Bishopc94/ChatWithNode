@@ -1,7 +1,7 @@
 var socket = io.connect();
 
-function addMessage(msg, pseudo) {
-  $("#chatEntries").append('<div class="message"><p>' + pseudo + ' : ' + msg + '</p></div>');
+function addMessage(msg, nickName) {
+  $("#chatEntries").append('<div class="message"><p>' + nickName + ' : ' + msg + '</p></div>');
 }
 
 function sentMessage() {
@@ -13,23 +13,23 @@ function sentMessage() {
   }
 }
 
-function setPseudo() {
-  if ($("#pseudoInput").val() != "")
+function setNickName() {
+  if ($("#nickNameInput").val() != "")
   {
-    socket.emit('setPseudo', $("#pseudoInput").val());
+    socket.emit('setNickName', $("#nickNameInput").val());
     $('#chatControls').show();
-    $('#pseudoInput').hide();
-    $('#pseudoSet').hide();
+    $('#nickNameInput').hide();
+    $('#nickNameSet').hide();
   }
 }
 
 socket.on('message', function(data){
-  addMessage(data['message'], data['pseudo']);
+  addMessage(data['message'], data['nickName']);
 });
 
 $(function() {
   $("#chatControl").hide();
-  $("#pseudoSet").click(function() {setPseudo()});
+  $("#nickNameSet").click(function() {setNickName()});
   $("#submit").click(function() {sentMessage();});
 });
 
